@@ -1,149 +1,147 @@
 
-# Backend API Documentation
+# Uber Clone Backend
 
-This documentation outlines the details of all the endpoints in the backend, including their descriptions, request/response formats, and error handling.
+This is the backend for the Uber Clone application. It is built using Node.js, Express.js, and MongoDB. It provides APIs for user authentication, ride booking, and other services.
 
----
+## Installation
 
-## Table of Contents
+1. Clone the repository:
+    ```bash
+    git clone <repository-url>
+    ```
+2. Navigate to the backend folder:
+    ```bash
+    cd backend
+    ```
+3. Install dependencies:
+    ```bash
+    npm install
+    ```
+4. Create a `.env` file in the root directory and add the following environment variables:
+    ```env
+    MONGO_URI=<your-mongodb-uri>
+    JWT_SECRET=<your-jwt-secret>
+    ```
+5. Start the server:
+    ```bash
+    npm start
+    ```
 
-1. [Overview](#overview)
-2. [General Guidelines](#general-guidelines)
-3. [Endpoints](#endpoints)
-   - [User Endpoints](#user-endpoints)
-4. [Future Additions](#future-additions)
-5. [Contact](#contact)
+## API Documentation
 
----
+### User Authentication
 
-## Overview
+#### Register User
 
-This project provides a backend API for handling user registration, authentication, and other functionalities. It is built using Node.js, Express.js, and MongoDB.
+**Endpoint:** `/api/v1/register`  
+**Method:** `POST`  
 
----
-
-## General Guidelines
-
-- All requests must be made to the `/api` base URL.
-- Responses will be in JSON format.
-- Secure authentication is implemented using JSON Web Tokens (JWT).
-
----
-
-## Endpoints
-
-### User Endpoints
-
-#### 1. Register User
-
-**HTTP Method:** `POST`  
-**Endpoint:** `/user/register`  
-
-**Description:** Registers a new user and returns a JWT token along with user details.
-
-##### Request Body
-
-| Field                 | Type     | Required | Description                                |
-|-----------------------|----------|----------|--------------------------------------------|
-| `fullname`            | Object   | Yes      | Contains the user's first and last name.   |
-| `fullname.firstname`  | String   | Yes      | User's first name (at least 3 characters).|
-| `fullname.lastname`   | String   | No       | User's last name (optional, at least 3 characters if provided). |
-| `email`               | String   | Yes      | User's email address (must be unique).     |
-| `password`            | String   | Yes      | User's password (minimum 6 characters).    |
-
-**Example Request Body:**
-
+**Request Body:**  
 ```json
 {
-  "fullname": {
-    "firstname": "John",
-    "lastname": "Doe"
-  },
-  "email": "johndoe@example.com",
-  "password": "password123"
-}
-```
-
-##### Success Response
-
-**Status Code:** `201 Created`
-
-```json
-{
-  "success": true,
-  "message": "User created successfully",
-  "token": "<JWT_TOKEN>",
-  "user": {
-    "_id": "64b9e2d0f6e5c6b8d7e4a5a8",
     "fullname": {
-      "firstname": "John",
-      "lastname": "Doe"
+        "firstname": "John",
+        "lastname": "Doe"
     },
     "email": "johndoe@example.com",
-    "socketId": null
-  }
+    "password": "password123"
 }
 ```
 
-##### Error Response
+**Validation:**  
+- `email`: Must be a valid email address.
+- `fullname.firstname`: Must be at least 3 characters long.
+- `password`: Must be at least 6 characters long.
 
-**Status Code:** `400 Bad Request`  
+**Response:**  
+- Success:  
+    ```json
+    {
+        "success": true,
+        "message": "User created successfully",
+        "token": "<jwt-token>",
+        "user": {
+            "_id": "<user-id>",
+            "fullname": {
+                "firstname": "John",
+                "lastname": "Doe"
+            },
+            "email": "johndoe@example.com"
+        }
+    }
+    ```
+- Error:  
+    ```json
+    {
+        "errors": [
+            { "msg": "Error message", "param": "field", "location": "body" }
+        ]
+    }
+    ```
 
-**Validation Errors:**
+#### Login User
 
+**Endpoint:** `/api/v1/login`  
+**Method:** `POST`  
+
+**Request Body:**  
 ```json
 {
-  "errors": [
-    {
-      "msg": "First name must be at least 3 characters long",
-      "param": "fullname.firstname",
-      "location": "body"
-    },
-    {
-      "msg": "Password must be at least 6 characters long",
-      "param": "password",
-      "location": "body"
-    }
-  ]
+    "email": "johndoe@example.com",
+    "password": "password123"
 }
 ```
 
-**Duplicate Email Error:**
+**Validation:**  
+- `email`: Must be a valid email address.
+- `password`: Must be at least 6 characters long.
 
-```json
-{
-  "errors": [
+**Response:**  
+- Success:  
+    ```json
     {
-      "msg": "Email already exists",
-      "param": "email",
-      "location": "body"
+        "token": "<jwt-token>",
+        "user": {
+            "_id": "<user-id>",
+            "fullname": {
+                "firstname": "John",
+                "lastname": "Doe"
+            },
+            "email": "johndoe@example.com"
+        }
     }
-  ]
-}
+    ```
+- Error:  
+    ```json
+    {
+        "errors": [
+            { "msg": "Error message", "param": "field", "location": "body" }
+        ]
+    }
+    ```
+
+## Folder Structure
+
+```
+backend/
+│
+├── controllers/
+│   ├── User.js            # Contains logic for user registration and login.
+│
+├── models/
+│   ├── User.js            # Mongoose schema for user model.
+│
+├── routes/
+│   ├── User.js            # User authentication routes.
+│
+├── .env                   # Environment variables.
+├── server.js              # Entry point of the application.
+├── package.json           # Node.js dependencies and scripts.
+└── README.md              # Documentation.
 ```
 
----
+## Future Enhancements
 
-## Future Additions
-
-This section is reserved for documenting additional endpoints and functionalities in the future. Each new endpoint should include the following details:
-
-1. **HTTP Method and Endpoint**  
-   - Description of the endpoint and its purpose.
-
-2. **Request Body (if applicable)**  
-   - Table describing the fields, their types, requirements, and descriptions.
-
-3. **Response**  
-   - Success and error responses with status codes.
-
-4. **Example Usage**  
-   - Sample requests and responses for easy reference.
-
----
-
-## Contact
-
-For any issues or queries, please contact the backend development team.
-
----
+- Add more endpoints for managing rides, payments, and driver interactions.
+- Add unit tests for all routes and controllers.
+- Implement WebSocket for real-time ride tracking.
