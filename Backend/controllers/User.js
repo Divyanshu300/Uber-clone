@@ -14,6 +14,14 @@ exports.registerUser = async (req , res , next) => {
 
     const { fullname , email , password } = req.body;
 
+    const isUserAlreadyExists = await userModel.findOne({email});
+    if(isUserAlreadyExists) {
+        return res.status(400).json({
+            success : false,
+            message : "User already exists"
+        })
+    }
+
     const hashedPassword = await userModel.hashPassword(password);//YE METHOD HMLOGO NEIN USER SCHEMA MEIN BNAAYA THA USKO CALL KIYA HAI
 
     const user = await userService.createUser({//YE METHOD HMLOGO NEIN USER SCHEMA MEIN BNAAYA THA USKO CALL KIYA HAI
