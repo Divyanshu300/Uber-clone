@@ -33,7 +33,7 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
 
 #### Register User
 
-**Endpoint:** `/api/v1/register`  
+**Endpoint:** `/users/register`  
 **Method:** `POST`  
 
 **Request Body:**  
@@ -81,7 +81,7 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
 
 #### Login User
 
-**Endpoint:** `/api/v1/login`  
+**Endpoint:** `/users/login`  
 **Method:** `POST`  
 
 **Request Body:**  
@@ -120,25 +120,65 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
     }
     ```
 
-## Folder Structure
 
+
+#### Get User Profile
+
+**Endpoint:** `/users/profile`  
+**Method:** `GET`  
+**Headers:**  
+```json
+{
+    "Authorization": "Bearer <jwt-token>"
+}
 ```
-backend/
-│
-├── controllers/
-│   ├── User.js            # Contains logic for user registration and login.
-│
-├── models/
-│   ├── User.js            # Mongoose schema for user model.
-│
-├── routes/
-│   ├── User.js            # User authentication routes.
-│
-├── .env                   # Environment variables.
-├── server.js              # Entry point of the application.
-├── package.json           # Node.js dependencies and scripts.
-└── README.md              # Documentation.
+
+**Response:**  
+- Success:  
+    ```json
+    {
+        "_id": "<user-id>",
+        "fullname": {
+            "firstname": "John",
+            "lastname": "Doe"
+        },
+        "email": "johndoe@example.com"
+    }
+    ```
+- Error:  
+    ```json
+    {
+        "success": false,
+        "message": "Unauthorized"
+    }
+    ```
+
+#### Logout User
+
+**Endpoint:** `/users/logout`  
+**Method:** `GET`  
+**Headers:**  
+```json
+{
+    "Authorization": "Bearer <jwt-token>"
+}
 ```
+
+**Response:**  
+- Success:  
+    ```json
+    {
+        "success": true,
+        "message": "Logged Out"
+    }
+    ```
+- Error:  
+    ```json
+    {
+        "success": false,
+        "message": "Unauthorized"
+    }
+    ```
 
 ## Future Enhancements
 

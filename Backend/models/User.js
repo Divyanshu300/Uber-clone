@@ -32,10 +32,11 @@ const userSchema = new mongoose.Schema({
 
 });
 
-userSchema.methods.generateAuthToken = () => {
-    const token = jwt.sign({_id : this._id} , process.env.JWT_SECRET);
+userSchema.methods.generateAuthToken = function () { // Use a regular function becoz arrow funtion this. ko bind nhi krr pata
+    const token = jwt.sign({ _id: this._id }, process.env.JWT_SECRET , {expiresIn : "24h"});
     return token;
 };
+
 
 userSchema.methods.comparePassword = async function (password) {//ARROW FUNCTION this. WAALI PROPERTY BIND NHI KRTA HAI SO USE NORMAL FUNCTION
     return await bcrypt.compare(password, this.password);
