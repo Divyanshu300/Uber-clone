@@ -1,7 +1,8 @@
 const express = require("express");
-const { registerCaptain } = require("../controllers/Captain");
+const { registerCaptain, loginCaptain, getCaptainProfile, logoutCaptain } = require("../controllers/Captain");
 const router = express.Router();
-const { body } = require("express-validator")
+const { body } = require("express-validator");
+const { authCaptain } = require("../middlewares/auth.middleware");
 
 router.post("/register" , [
         body("email").isEmail().withMessage("Invalid Email"),//YHAA PRR HMLOGO NE CHECK LAGA DIYA FOR VALIDATION AGAR ERRORS CHECK CONTROLLERS MEIN KRRENGE
@@ -15,16 +16,16 @@ router.post("/register" , [
     registerCaptain
 );
 
-// router.post("/login" , [
-//         body("email").isEmail().withMessage("Invalid Email"),
-//         body("password").isLength({min : 6}).withMessage("Password must be atleast 6 characters long"),
-//     ],
-//     loginUser
-// );
+router.post("/login" , [
+        body("email").isEmail().withMessage("Invalid Email"),
+        body("password").isLength({min : 6}).withMessage("Password must be atleast 6 characters long"),
+    ],
+    loginCaptain
+);
 
-// router.get("/profile" , authUser , getUserProfile);
+router.get("/profile" , authCaptain , getCaptainProfile);
 
-// router.get("/logout" , authUser , logoutUser);
+router.get("/logout" , authCaptain , logoutCaptain);
 
 
 

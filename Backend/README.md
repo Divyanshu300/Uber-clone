@@ -183,6 +183,8 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
   }
   ```
 
+
+
 ### Captain Authentication
 
 #### Register Captain
@@ -250,10 +252,10 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
     "errors": [{ "msg": "Error message", "param": "field", "location": "body" }]
   }
   ```
-<!-- 
-#### Login User
 
-**Endpoint:** `/users/login`  
+#### Login Captain
+
+**Endpoint:** `/captains/login`  
 **Method:** `POST`
 
 **Request Body:**
@@ -275,14 +277,23 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
 - Success:
   ```json
   {
+    "success": true,
+    "message": "Captain loggedIn successfully",
     "token": "<jwt-token>",
-    "user": {
+    "captain": {
       "_id": "<user-id>",
       "fullname": {
         "firstname": "John",
         "lastname": "Doe"
       },
-      "email": "johndoe@example.com"
+      "email": "johndoe@example.com",
+      "status": "inactive",
+      "vehicle": {
+          "color": "red",
+          "plate": "MP 04 XY 6204",
+          "capacity": 3,
+          "vehicleType": "car"
+      },
     }
   }
   ```
@@ -293,9 +304,9 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
   }
   ```
 
-#### Get User Profile
+#### Get Captain Profile
 
-**Endpoint:** `/users/profile`  
+**Endpoint:** `/captains/profile`  
 **Method:** `GET`  
 **Headers:**
 
@@ -315,7 +326,14 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
       "firstname": "John",
       "lastname": "Doe"
     },
-    "email": "johndoe@example.com"
+    "email": "johndoe@example.com",
+    "status": "inactive",
+    "vehicle": {
+        "color": "red",
+        "plate": "MP 04 XY 6204",
+        "capacity": 3,
+        "vehicleType": "car"
+    },
   }
   ```
 - Error:
@@ -328,7 +346,7 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
 
 #### Logout User
 
-**Endpoint:** `/users/logout`  
+**Endpoint:** `/captain/logout`  
 **Method:** `GET`  
 **Headers:**
 
@@ -344,7 +362,7 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
   ```json
   {
     "success": true,
-    "message": "Logged Out"
+    "message": "Captain logged out successfully"
   }
   ```
 - Error:
@@ -353,7 +371,7 @@ This is the backend for the Uber Clone application. It is built using Node.js, E
     "success": false,
     "message": "Unauthorized"
   }
-  ``` -->
+  ```
 
 ## Future Enhancements
 
