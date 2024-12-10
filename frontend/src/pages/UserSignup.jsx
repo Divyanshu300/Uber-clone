@@ -1,24 +1,37 @@
-import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import React, { useContext, useState } from 'react'
+import { Link, useNavigate } from 'react-router-dom'
+import axios from "axios"
+import { UserDataContext } from '../context/UserContext';
+const BASE_URL = import.meta.env.VITE_BASE_URL;
 
 const UserSignup = () => {
   const [email , setEmail] = useState("");
   const [password , setPassword] = useState("");
   const [firtsName , setFirtsName] = useState("");
   const [lastName , setLastName] = useState("");
-  const [userData , setUserData] = useState("");
+  const {user , setUser} = useContext(UserDataContext);
+  const navigate = useNavigate()
 
-  const submitHandler = (e) => {
+  const submitHandler = async(e) => {
     e.preventDefault();
 
-    setUserData({
-      fullName : {
-        firtsName : firtsName,
-        lastName : lastName
+    const newUser = {
+      fullname : {
+        firstname : firtsName,
+        lastname : lastName
       },
       email : email,
       password : password
-    });
+    };
+
+    const response = await axios.post(`${BASE_URL}/users/register` , newUser);
+
+    if(response.status === 201) {
+      const data = response.data;
+      setUser(data.user);
+      localStorage.setItem("token" , data.token);
+      navigate("/home")
+    }
 
     setEmail("");
     setPassword("");
@@ -71,7 +84,7 @@ const UserSignup = () => {
           />
 
           <button className='bg-[#111] text-white font-semibold rounded px-4 py-2 w-full text-lg placeholder:text-base mb-6'>
-            Login
+            Create account
           </button>
 
         </form>
